@@ -72,7 +72,7 @@ steps:
     inputs:
       provider: "aws"
       command: "init"
-      workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group/examples/eks_managed_node_group"
+      workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
       backendServiceAWS: "aws-for-terraform-2"
       backendAWSBucketName: "zt-tf-state-store"
       backendAWSKey: "aws-vpn/pbsz.tfstate"
