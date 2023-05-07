@@ -21,12 +21,6 @@ resources:
       endpoint: zetaris
       name: zetaris/tf-aws-tags
 
-    - repository: tf-eks
-      type: github
-      endpoint: zetaris
-      name: zetaris/tf-eks
-      ref: refs/heads/inqtel
-
 steps:
   - checkout: self
     path: "tf"
