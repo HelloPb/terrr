@@ -75,7 +75,7 @@ steps:
       workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group/examples/eks_managed_node_group"
       backendServiceAWS: "aws-for-terraform-2"
       backendAWSBucketName: "zt-tf-state-store"
-      backendAWSKey: "aws-vpn/pb.tfstate"
+      backendAWSKey: "aws-vpn/pbsz.tfstate"
 
   - task: TerraformTaskV4@4
     displayName: terraform plan - eks cluster
