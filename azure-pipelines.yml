@@ -73,7 +73,7 @@ steps:
       provider: "aws"
       command: "init"
       workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-      backendServiceAWS: "aws-for-terraform-2"
+      backendServiceAWS: "aws-for-terraform"
       backendAWSBucketName: "zt-tf-state-store"
       backendAWSKey: "aws-vpn/pbsz.tfstate"
 
@@ -83,7 +83,7 @@ steps:
       provider: "aws"
       command: "plan"
       workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-      environmentServiceNameAWS: "aws-for-terraform-2"
+      environmentServiceNameAWS: "aws-for-terraform"
 
   - ${{ if eq(parameters.destroy, false) }}:
       - task: TerraformTaskV4@4
@@ -92,7 +92,7 @@ steps:
           provider: "aws"
           command: "apply"
           workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-          environmentServiceNameAWS: "aws-for-terraform-2"
+          environmentServiceNameAWS: "aws-for-terraform"
 
   - ${{ if eq(parameters.destroy, true) }}:
       - task: TerraformTaskV4@4
@@ -101,4 +101,4 @@ steps:
           provider: "aws"
           command: "destroy"
           workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-          environmentServiceNameAWS: "aws-for-terraform-2"
+          environmentServiceNameAWS: "aws-for-terraform"
