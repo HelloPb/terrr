@@ -87,7 +87,7 @@ module "eks" {
   subnet_ids               = module.vpc.private_subnets
   control_plane_subnet_ids = module.vpc.intra_subnets
 
-  create_aws_auth_configmap = true
+  # create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
 
   eks_managed_node_group_defaults = {
