@@ -34,6 +34,13 @@ steps:
       AWS_SECRET_ACCESS_KEY="RU9f82Nt/UiOkBzPzdjx2f28M14muz64EGGy+QD4"
       echo "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY]$AWS_SECRET_ACCESS_KEY"
 
+  - bash: |
+      echo $AWS_ACCESS_KEY_ID
+      echo $AWS_ACCESS_KEY_ID
+      echo "##vso[task.setvariable variable=AWS_ACCESS_KEY_ID]$AWS_ACCESS_KEY_ID"
+      AWS_SECRET_ACCESS_KEY="RU9f82Nt/UiOkBzPzdjx2f28M14muz64EGGy+QD4"
+      echo "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY]$AWS_SECRET_ACCESS_KEY"
+
   # - task: HelmInstaller@0
   #   displayName: helm 2.14.1 - installing
   #   inputs:
