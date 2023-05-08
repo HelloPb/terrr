@@ -28,77 +28,83 @@ steps:
   # - checkout: tf-aws-tags
   #   path: 'tf-aws-tags'
 
-  - task: HelmInstaller@0
-    displayName: helm 2.14.1 - installing
-    inputs:
-      helmVersion: "2.14.1"
-      installKubectl: false
+  - bash: |
+      AWS_ACCESS_KEY_ID="AKIAUDI43WQVZPVX4YGX"
+      echo "##vso[task.setvariable variable=AWS_ACCESS_KEY_ID]$AWS_ACCESS_KEY_ID"
+      AWS_SECRET_ACCESS_KEY="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"
+      echo "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY]$AWS_SECRET_ACCESS_KEY"
 
-  - task: Bash@3
-    displayName: helm repo - adding
-    inputs:
-      targetType: "inline"
-      script: |
-        # Write your commands here
+  # - task: HelmInstaller@0
+  #   displayName: helm 2.14.1 - installing
+  #   inputs:
+  #     helmVersion: "2.14.1"
+  #     installKubectl: false
 
-        helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
-        helm repo add eks https://aws.github.io/eks-charts
-        helm repo add aws-efs-csi-driver https://kubernetes-sigs.github.io/aws-efs-csi-driver
-        helm repo add datadog https://helm.datadoghq.com
-        helm repo add apache-airflow https://airflow.apache.org
-        helm repo add bitnami https://charts.bitnami.com/bitnami
-        helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
-        helm repo add hashicorp https://helm.releases.hashicorp.com
+  # - task: Bash@3
+  #   displayName: helm repo - adding
+  #   inputs:
+  #     targetType: "inline"
+  #     script: |
+  #       # Write your commands here
 
-  - task: Bash@3
-    displayName: install aws cli
-    inputs:
-      targetType: "inline"
-      script: |
-        Write your commands here
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
-        which aws
-        aws --version
+  #       helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
+  #       helm repo add eks https://aws.github.io/eks-charts
+  #       helm repo add aws-efs-csi-driver https://kubernetes-sigs.github.io/aws-efs-csi-driver
+  #       helm repo add datadog https://helm.datadoghq.com
+  #       helm repo add apache-airflow https://airflow.apache.org
+  #       helm repo add bitnami https://charts.bitnami.com/bitnami
+  #       helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  #       helm repo add hashicorp https://helm.releases.hashicorp.com
 
-  - task: TerraformInstaller@0
-    displayName: install terraform v1.2.8
-    inputs:
-      terraformVersion: "1.2.8"
+  # - task: Bash@3
+  #   displayName: install aws cli
+  #   inputs:
+  #     targetType: "inline"
+  #     script: |
+  #       Write your commands here
+  #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #       unzip awscliv2.zip
+  #       sudo ./aws/install
+  #       which aws
+  #       aws --version
 
-  - task: TerraformTaskV4@4
-    displayName: terraform init - eks cluster
-    inputs:
-      provider: "aws"
-      command: "init"
-      workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-      backendServiceAWS: "aws-for-terraform"
-      backendAWSBucketName: "zt-tf-state-store"
-      backendAWSKey: "aws-vpn/pbsz.tfstate"
+  # - task: TerraformInstaller@0
+  #   displayName: install terraform v1.2.8
+  #   inputs:
+  #     terraformVersion: "1.2.8"
 
-  - task: TerraformTaskV4@4
-    displayName: terraform plan - eks cluster
-    inputs:
-      provider: "aws"
-      command: "plan"
-      workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-      environmentServiceNameAWS: "aws-for-terraform"
+  # - task: TerraformTaskV4@4
+  #   displayName: terraform init - eks cluster
+  #   inputs:
+  #     provider: "aws"
+  #     command: "init"
+  #     workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
+  #     backendServiceAWS: "aws-for-terraform"
+  #     backendAWSBucketName: "zt-tf-state-store"
+  #     backendAWSKey: "aws-vpn/pbsz.tfstate"
 
-  - ${{ if eq(parameters.destroy, false) }}:
-      - task: TerraformTaskV4@4
-        displayName: terraform apply - eks cluster
-        inputs:
-          provider: "aws"
-          command: "apply"
-          workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-          environmentServiceNameAWS: "aws-for-terraform"
+  # - task: TerraformTaskV4@4
+  #   displayName: terraform plan - eks cluster
+  #   inputs:
+  #     provider: "aws"
+  #     command: "plan"
+  #     workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
+  #     environmentServiceNameAWS: "aws-for-terraform"
 
-  - ${{ if eq(parameters.destroy, true) }}:
-      - task: TerraformTaskV4@4
-        displayName: terraform destroy - eks cluster
-        inputs:
-          provider: "aws"
-          command: "destroy"
-          workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
-          environmentServiceNameAWS: "aws-for-terraform"
+  # - ${{ if eq(parameters.destroy, false) }}:
+  #     - task: TerraformTaskV4@4
+  #       displayName: terraform apply - eks cluster
+  #       inputs:
+  #         provider: "aws"
+  #         command: "apply"
+  #         workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
+  #         environmentServiceNameAWS: "aws-for-terraform"
+
+  # - ${{ if eq(parameters.destroy, true) }}:
+  #     - task: TerraformTaskV4@4
+  #       displayName: terraform destroy - eks cluster
+  #       inputs:
+  #         provider: "aws"
+  #         command: "destroy"
+  #         workingDirectory: "$(Pipeline.Workspace)/tf/examples/eks_managed_node_group"
+  #         environmentServiceNameAWS: "aws-for-terraform"
